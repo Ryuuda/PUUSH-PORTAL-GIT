@@ -1,0 +1,168 @@
+
+/*Centers image on mobile*/
+
+@media (max-width: 768px) {
+
+	body{
+		padding-top: 0px;
+	}
+
+	img#Brand{
+	    margin: 0 auto;
+	    display: block;
+	    position: relative;
+	    padding-top: 5px;
+	    padding-bottom: 5px;
+		height: 100%;
+	}
+
+	.navbar-default .navbar-toggle{
+		display: none;
+	}
+
+	nav.navbar-default{
+		position: relative;
+		display: block;
+		margin-bottom: 0px;
+
+	}
+
+	#hidemenubutton{
+		display: block;
+		width:100%;
+		height: 50px;
+    	font-size: 23px;
+    	color: #fff;
+    	background-color: slategrey;
+    	margin-top: 5px;
+    	margin-bottom: 5px;
+    	border: 2px solid silver;
+	}
+
+	#SmartGauge-Jumbotron{
+		padding-top: 5px;
+		height: 100%;
+	}
+	#SmartGauge-Jumbotron img{
+		display: none;
+	}
+
+	#mobile-menu{
+		display: block;
+		margin: 0 auto;
+		padding: 0px;
+		position: relative;
+	}
+
+	#puush-main-body{
+		max-width: 500px;
+		height: 100%;
+		padding-top: 20px;
+	}
+
+	#lap-time-table{
+		width: auto;
+	}
+
+	.social-share{
+		padding-left: 0px
+	}
+
+	#droneview iframe{
+		display: none;
+	}
+
+	#droneview-placeholder{
+	display: block;
+	}
+
+	div.center-block{
+		white-space: initial;
+		margin-top: 0px;
+		margin-bottom: 0px;
+	}
+
+	#lap-time-table h3, #lap-time-table h4{
+		margin-top: 0px;
+		margin-bottom: 0px;
+		text-align: left;
+		font-size: 20px;
+
+	}
+
+	#lap-time-table.table>tbody>tr>td{
+		padding: 15px;
+		font-size: 25px;
+
+	}
+	.pad-shadow{
+		padding-top: 0px;
+	}
+
+	div.alert{
+		/*position: absolute;*/
+	}
+
+	#welcome-alert{
+		font-size: 12px;
+	}
+
+	/*#looptodo_feedback_btn{
+		top:50%;
+	}*/
+
+	#SmartGaugeHeading{
+		margin-top: 0px;
+	}
+
+	#speedgates td{
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+
+	#splits td{
+		padding-left: 5px;
+		padding-right: 5px;
+	}
+
+	.scrollable-menu {
+    height: auto;
+    max-height: 400px;
+    overflow-x: hidden;
+	}
+
+
+	#hidemenubutton span{
+		font-family: sans-serif;
+		font-weight: 300px;
+	}
+
+	#mobile-menu .nav-stacked>li{
+		text-align: center
+	}
+
+	#mobile-menu .container{
+		padding-right: 0px;
+		padding-left: 0px;
+	}
+
+	#mobile-menu .nav-pills>li>a{
+		border-radius: 0px;
+	}
+
+	#droneview-placeholder p{
+		 font-size: 20px;
+    	text-align: center;
+    	padding: 20px;
+	}
+
+	#speed-time-table h5{
+		font-size: 11px;
+	}
+
+	#speed-time-table.table>tbody>tr>td{
+		font-size: 15px
+	} 
+
+}
+

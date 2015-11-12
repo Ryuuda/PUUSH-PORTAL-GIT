@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PUSH User Registration</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/upload_style.css') }}">
+</head>
+<body>
+
+<h1>PUSH User Registration</h1>
+
+Register to recieve your PUSH FUEL data and logs<p>
+
+<hr><p>
+
+<form id="registerForm" action="{{ url_for('register_user_post') }}" method="POST" enctype="multipart/form-data">
+    <strong>Name*:</strong><br>
+    <input type="text" size="20" name="name" value="Todd Berk"><p>
+	
+    <strong>Email Address*:</strong><br>
+    <input type="text" size="20" name="email" value="todd+dev@pushthelimit.net"><p>
+	
+    <strong>Mobile Phone:</strong><br>
+    <input type="text" size="20" name="phone" value=""><p>
+
+    <strong>SmartGauge ID:</strong><br>
+    <input type="text" size="20" name="gauge_id" value=""><p>
+	
+	<!--
+    <strong>Send Text Msg Link:</strong><br>
+    <input type="radio" name="send_txt" value="yes" checked> Yes
+    <input type="radio" name="send_txt" value="no"> No<p>
+	-->
+
+
+    <input type="submit" value="Register" id="register-button">
+</form>
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+var frm = $('#registerForm');
+frm.submit(function (ev) {
+	ev.preventDefault();
+	// Gray out the form.
+    $("#registerForm :input").attr("disabled", "disabled");
+	
+	var fd = new FormData();
+	// get the form data
+	// there are many ways to get this data using jQuery (you can use the class or id also)
+	fd.append('name',$('input[name=name]').val());
+	fd.append('email',$('input[name=email]').val());
+	fd.append('phone',$('input[name=phone]').val());
+	fd.append('gauge_id',$('input[name=gauge_id]').val());
+	fd.append('__ajax', 'true');
+
+	$.ajax({
+		type: frm.attr('method'),
+		url: frm.attr('action'),
+        contentType: false,
+        processData: false,
+        cache: false,
+		data: fd,
+        success: function(data) {
+            data = JSON.parse(data);
+			window.alert(data.msg);
+			$("#registerForm :input").removeAttr("disabled");
+			if (data.status === "ok"){
+				frm.find("input[type=text], textarea").val("");
+			}
+			return;
+        }
+	});
+	
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>View</title>
+  <meta name="description" content="The HTML5 Herald">
+  <meta name="author" content="SitePoint">
+	
+	<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.1.1.min.js') }}"></script>
+
+</head>
+
+<body>
+{% if race_course.name|length > 0 %}
+<strong> {{ name }} @ {{ race_course.name }} </strong><br>
+{% endif %}
+
+<iframe width="1175px" height="510px" id="doarama-iframe" src="https://doarama-thirdparty-dev.herokuapp.com/api/0.2/visualisation?k={{ vis_key }}&name={{ name }}&avatar=http%3A%2F%2Fplacehold.it%2F32x32" frameborder="0" webkitAllowFullScreen mozAllowFullScreen allowFullScreen></iframe>
+{% if lap_times %}
+<br>
+<table style="width:250px">
+  <tr>
+    <td><b>Lap Number</b></td>
+    <td><b>Time mm:ss.sss</b></td>		
+    <td><b>Top Speed MPH</b></td>
+  </tr>
+{% for lap in lap_times %}
+  <tr>
+    <td>{{ loop.index }}</td>
+    <td>{{ "%.0f:%06.3f"|format( (lap.lap_time//60)|round|int,(lap.lap_time-(lap.lap_time//60)*60)|round(3) ) }}</td>
+    <td>{{ "%.1f"|format(lap.max_speed_mph) }}</td>		
+  </tr>
+{% endfor %}
+</table>
+{% endif %}
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/doaramaClientAPI.js') }}"></script>
+
+</body>
+</html>
+

@@ -1,0 +1,49 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>PUSH SmartGauge Event Upload</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/upload_style.css') }}">
+</head>
+<body>
+
+<h1>PUSH SmartGauge Upload</h1>
+
+Upload your <strong>SmartGauge Raw Log Files</strong> in the form below.<p>
+Multiple file uploads should follow naming convention S001-000.dat, S001-002.dat, etc..<p>
+
+<hr><p>
+
+<form id="upload-form" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+
+    <strong>Select Activity Type:</strong><br>
+    <select name="activity_type">
+        <option value="1">Motorcycle</option>
+    </select><p>
+
+	<input type="radio" name="auto_detect_user" value="True" checked>Auto Detect User<br><br>
+	
+    <strong>Files:</strong><br>
+    Select files OR drag them into the box below.
+    <input id="file-picker" type="file" name="file" accept="image/*" multiple><p>
+
+    <div id="dropbox">
+        Drag and Drop Files Here
+    </div><p>
+
+    <fieldset id="progress" style="display: none">
+        <legend>Files Progress</legend>
+
+        <div class="progress-trough">
+            <div id="progress-bar" class="progress-bar">0%</div>
+        </div>
+    </fieldset><p>
+
+    <input type="submit" value="Upload!" id="upload-button">
+</form>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.1.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/uploadr.js') }}"></script>
+
+</body>
+</html>
