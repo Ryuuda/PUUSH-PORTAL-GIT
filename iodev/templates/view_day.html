@@ -147,7 +147,7 @@ mixpanel.init("ae4c13b855e9542b7a041f34fac3a2e8");
 
                 </div>
                 <div class="container col-xs-6 text-center">
-                    <img alt="Brand" id="Brand" src="../static/Push-Logo-Beta.png">
+                    <img id="Brand" src="../static/tab_logo.png">
                 </div>
                 <div class="container col-xs-3 text-right">
 
@@ -168,7 +168,7 @@ mixpanel.init("ae4c13b855e9542b7a041f34fac3a2e8");
     </div>
 </div>
 <div class="row">
-    <h4 class="container col-xs-6">Todd Approve 1</h4>
+    <h4 class="container col-xs-6"><b>Todd Approve 1</b></h4>
     <h5 class="container col-xs-6 text-right">Time</h5>
 </div>
 <div class="row">
@@ -192,7 +192,7 @@ mixpanel.init("ae4c13b855e9542b7a041f34fac3a2e8");
     <uib-accordion close-others="true">
         <uib-accordion-group heading="Static Header, initially expanded" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
             <uib-accordion-heading>
-                Lap Times <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isFirstOpen==false, 'glyphicon-chevron-up': status.isFirstOpen==true}"></i>
+                <h5 class="container text-left">Lap Times <i class="puushTextRed pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isFirstOpen==false, 'glyphicon-chevron-up': status.isFirstOpen==true}"></i></h5>
             </uib-accordion-heading>
 
             <div class="container">
@@ -220,25 +220,150 @@ mixpanel.init("ae4c13b855e9542b7a041f34fac3a2e8");
                 </table>
             </div>
 
-
         </uib-accordion-group>
         <uib-accordion-group is-open="status.is1open">
             <uib-accordion-heading>
-                Drone View <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.is1open==true, 'glyphicon-chevron-down': status.is1open==false}"></i>
+                <h5 class="container text-left">Drone View <i class="puushTextRed pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.is1open==true, 'glyphicon-chevron-down': status.is1open==false}"></i></h5>
             </uib-accordion-heading>
-            PLACEHOLDER
+
+            <div class="container">
+                <!--EMPTY IFRAMES FOR NOW, BECAUSE NO SERVER.-->
+            <div>
+                <!-- Video / Interactive Mode Selection -->
+                <ul>
+                    <li id="droneview-video-btn" role="presentation" class="active"><a href="#">Video</a></li>
+                    <li id= "droneview-int-btn" role="presentation"><a href="#">Interactive DroneView</a></li>
+                </ul>
+                <!-- DroneView -->
+                <iframe col-centered width="940px" height="420px" id="doarama-iframe"
+                        src=""
+                        frameborder="0" webkitAllowFullScreen mozAllowFullScreen allowFullScreen>
+                </iframe>
+                Drone View here ^
+                <!-- Video -->
+                <div class="droneVideoWrapper">
+                    <iframe col-centered id="droneview-video" class='sproutvideo-player'
+                            width='630' height='354' frameborder='0' allowfullscreen></iframe>
+                </div>
+                Video View here ^
+                <script type="text/javascript">
+               //hide DroneView when video available
+                $('#doarama-iframe').hide();
+                </script>
+            </div>
+
+            <div>
+                <iframe col-centered width="940px" height="420px" id="doarama-iframe"
+                        src=""
+                        frameborder="0" webkitAllowFullScreen mozAllowFullScreen allowFullScreen>
+                </iframe>
+                Moible Video here ^
+                <!-- DroneView Mobile Placeholder -->
+                <div id="droneview-placeholder">
+                    <p>We will render a mobile video of your Droneview in about 24 hours. In the meantime you can check on a laptop/desktop. We apologize for the
+                        inconvenience.</p>
+                </div>
+
+            </div>
+            </div>
+
         </uib-accordion-group>
         <uib-accordion-group is-open="status.is2open">
             <uib-accordion-heading>
-                Speed Gates <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.is2open==true, 'glyphicon-chevron-down': status.is2open==false}"></i>
+                <h5 class="container text-left">Speed Gates <i class="puushTextRed pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.is2open==true, 'glyphicon-chevron-down': status.is2open==false}"></i></h5>
             </uib-accordion-heading>
-            PLACEHOLDER
+
+            <div class="container">
+
+                <img alt="Fontana_Speedgates" id="SpeedGates_Image" width="100%" src="../static/SpeedGates_Fontana.png">
+
+                <table class="table">
+                    <thead class="puushTextRed">
+                    <tr>
+                        <th class="text-left">LAP</th>
+                        <th class="text-left">TIME</th>
+                        <th class="text-left">G 1</th>
+                        <th class="text-left">G 2</th>
+                        <th class="text-left">G 3</th>
+                        <th class="text-left">G 4</th>
+
+                        <!--PLACEHOLDER-->
+                        <!--<th class="text-right" ng-repeat="gate in speedgate_points track by $index">G {{gate.index}}</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <!--Dummy Data-->
+                        <td class="text-left">Dummy Data for Now</td>
+                        <td class="text-left">Time</td>
+                        <td class="text-left">Fake</td>
+                        <td class="text-left">Data</td>
+                        <td class="text-left">Here</td>
+                        <td class="text-left">zzzz</td>
+
+                        <!--REPLACE WITH NG REPEATS AND ACTUAL API LATER.-->
+                        <!--<td>{{ fastest_lap.lap_num }}</td>-->
+                        <!--<td>-->
+                            <!--{{ "%.0f:%06.3f"|format(-->
+                            <!--(fastest_lap.lap_time//60)|round|int,(fastest_lap.lap_time-(fastest_lap.lap_time//60)*60)|round(3)-->
+                            <!--) }}-->
+                        <!--</td>-->
+                        <!--{% for point in speedgate_points %}-->
+                        <!--<td>{{ "%.1f"|format(point.speed_m_s * 2.23694) }}</td>-->
+                        <!--{% endfor %}-->
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
         </uib-accordion-group>
         <uib-accordion-group is-open="status.open">
             <uib-accordion-heading>
-                Split Times <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.open==true, 'glyphicon-chevron-down': status.open==false}"></i>
+                <h5 class="container text-left">Split Times <i class="puushTextRed pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.open==true, 'glyphicon-chevron-down': status.open==false}"></i></h5>
             </uib-accordion-heading>
-            PLACEHOLDER
+
+            <img alt="Splits_Fontana" id="Splits_Image" width="100%" src="../static/Splits_Fontana.png">
+
+            <table class="table">
+                <thead class="puushTextRed">
+                <tr>
+                    <th class="text-left">LAP</th>
+                    <th class="text-left">TIME</th>
+                    <th class="text-left">S 1</th>
+                    <th class="text-left">S 2</th>
+                    <th class="text-left">S 3</th>
+                    <th class="text-left">S 4</th>
+
+                    <!--PLACEHOLDER-->
+                    <!--<th class="text-right" ng-repeat="split in fastest_lap_splits track by $index">G {{split.index}}</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <!--Dummy Data-->
+                    <td class="text-left">Dummy Data for Now</td>
+                    <td class="text-left">Time</td>
+                    <td class="text-left">Fake</td>
+                    <td class="text-left">Data</td>
+                    <td class="text-left">Here</td>
+                    <td class="text-left">zzzz</td>
+
+                    <!--REPLACE WITH NG REPEATS AND ACTUAL API LATER.-->
+                    <!--<td>{{ fastest_lap.lap_num }}</td>-->
+                    <!--<td>-->
+                        <!--{{ "%.0f:%06.3f"|format(-->
+                        <!--(fastest_lap.lap_time//60)|round|int,(fastest_lap.lap_time-(fastest_lap.lap_time//60)*60)|round(3)-->
+                        <!--) }}-->
+
+                    <!--</td>-->
+                    <!--{% for split in fastest_lap_splits %}-->
+                    <!--<td>{{ "%.1f"|format(split.split_time) }}</td>-->
+                    <!--{% endfor %}-->
+                </tr>
+                </tbody>
+            </table>
+
         </uib-accordion-group>
     </uib-accordion>
 

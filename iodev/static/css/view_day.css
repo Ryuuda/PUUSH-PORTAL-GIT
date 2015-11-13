@@ -21,6 +21,10 @@
 	background-color: #fff !important;
 }
 
+#Brand{
+	transform: translateY(30%);
+}
+
 /*html {*/
     /*height:100%;*/
 /*}*/
