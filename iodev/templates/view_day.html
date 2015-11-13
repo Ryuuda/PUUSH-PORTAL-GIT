@@ -1,6 +1,6 @@
 <!doctype html>
 
-<html lang="en">
+<html lang="en" data-ng-app="puushApp">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,8 +9,7 @@
     <meta name="description" content="PUSH Inc. SmartGauge Track Day Summary">
     <meta name="author" content="SitePoint">
 
-    <link href="{{ url_for('static', filename='css/view_day.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/view_day_portal.css') }}" rel="stylesheet">
+
 
 	<meta property="fb:app_id"				content="{{ g.FACEBOOK_APP_ID }}" />
     <meta property="og:url"					content="{{ request.url }}"/>
@@ -23,8 +22,20 @@
 	<meta property="og:video:width"			content="1280"  />
 	<meta property="og:video:height"		content="720"  />
 
-    <!-- Bootstrap -->
-    <link href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- Bootstrap & Angular -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.js"></script>
+
+    <!-- CSS -->
+    <link href="../static/css/view_day.css" rel="stylesheet">
+    <!--<link href="{{ url_for('static', filename='css/view_day.css') }}" rel="stylesheet">-->
+    <!--<link href="{{ url_for('static', filename='css/view_day_portal.css') }}" rel="stylesheet">-->
 
     <!-- Favicon -->
     <link rel="shortcut icon" href="/static/PushFavicon.ico" type="image/x-icon">
@@ -64,12 +75,11 @@ mixpanel.init("ae4c13b855e9542b7a041f34fac3a2e8");
 
 </head>
 
-<body>
+<body ng-controller="viewdayCtrl">
 <div id="fb-root"></div>
 <!-- Load Facebook SDK for JavaScript -->
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="{{ url_for('static', filename='js/urlParam.js') }}"></script>
+
 <!-- Facebook SDK stuff -->
 <script>
     window.fbAsyncInit = function () {
@@ -104,420 +114,523 @@ mixpanel.init("ae4c13b855e9542b7a041f34fac3a2e8");
     }(document, 'script', 'facebook-jssdk'));
 </script>
 
-<!-- Handles showing / hiding of the mobile menu -->
-<script>
-    $( document ).ready(function() {
-    $('#hidemenubutton').html("<span>Press to Hide Menu</span>" );
-
-    var mobileToggle = true;
-    $('#hidemenubutton').click(
-    	function(){
-    		mobileToggle = !mobileToggle;
-    		// alert("Toggling menu: " + mobileToggle);
-
-    		// Todo: Add a css style and apply it that allows for smooth transition
-    		if(mobileToggle){
-    			$('#mobile-menu').css('display', 'block');
-    			$('#hidemenubutton').html('<span>Press to Hide Menu</span>' );
-
-    		}
-    		else{
-    			$('#mobile-menu').css('display', 'none');
-    			$('#hidemenubutton').html('<span>Press to Show Menu</span>' );
-    		}
-    	});
-});
-    
-</script>
-
 
 <!-- Fixed navbar -->
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                    aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <img alt="Brand" id="Brand" src="/static/Push-Logo-Beta.png">
 
-            <div class="row"> 
-            	<button id="hidemenubutton" class="btn btn-large">Press to Hide Button </button> 
+<div class="row">
+    <div class="puushRed">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="container col-xs-3">
 
-            </div>
-            <div class="row col-xs-12" id="mobile-menu">
+                    <div class="btn-group" uib-dropdown dropdown-append-to-body>
+                        <button id="btn-append-to-body" type="button" class="btn puushRed" uib-dropdown-toggle>
+                            Session {{datalog.session_num}}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="uib-dropdown-menu" role="menu" aria-labelledby="btn-append-to-body" >
+                            <!--ng repeat data in datalog_list-->
+                            <li><a href="{{ url_for('view_day', user_id=datalog.user.id, date_str=date.strftime('%m-%d-%Y'), datalog_id=session.id) }}"> Session {{data.index}} </a></li>
+                            <li><a href="">123456</a></li>
+                            <li><a href="">123456</a></li>
+                            <li><a href="">123456</a></li>
+                            <!--Commented old for loop just in case-->
 
-                        <div class="container col-xs-6">
-                            <ul class="nav nav-pills nav-stacked span2" >
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                                       aria-expanded="false">Viewing Session {{ datalog.session_num }}<span class="caret"
-                                                                                                            id="session-caret"></span></a>
-                                    <ul class="dropdown-menu scrollable-menu">
-                                        {% for session in datalog_list %}
-                                        <li><a class="session-link"
-                                               href="{{ url_for('view_day', user_id=datalog.user.id, date_str=date.strftime('%m-%d-%Y'), datalog_id=session.id) }}">Session
-                                            {{ loop.index }}</a></li>
-                                        {% endfor %}
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a id="laptime-link-mob" class="close-welcome" href="#laptimes" data-toggle="tab">Lap Times</a>
-                                </li>
-								<li>
-                                    <a id="speed-gate-link-mob" class="close-welcome" href="#speedgates" data-toggle="tab">Speed Gates</a>
-                                </li>
-                                <li>
-                                    <a id="splits-link-mob" class="close-welcome" href="#splits" data-toggle="tab">Split Times</a>
-                                </li>
-								<!-- ProCompare Removed
-                                <li>
-                                    <a id="procompare-link" class="close-welcome" href="#procompare" data-toggle="tab">ProCompare</a>
-                                </li>
-								-->
-                            </ul>
-                        </div>
+                            <!--{% for session in datalog_list %}-->
+                            <!--<li><a class="session-link"-->
+                                   <!--href="{{ url_for('view_day', user_id=datalog.user.id, date_str=date.strftime('%m-%d-%Y'), datalog_id=session.id) }}">Session-->
+                                <!--{{ loop.index }}</a></li>-->
+                            <!--{% endfor %}-->
 
-
-                        <div class="container col-xs-6">
-                            <ul class="nav nav-pills nav-stacked span2">
-                                <li>
-                                    <a id="droneview-link-mob" class="close-welcome" href="#droneview" data-toggle="tab">DroneView</a>
-                                </li>
-                                <li>
-                                    <a id="video-overlay-link-mob" href="">Video Overlay</a>
-                                </li>
-                                <li>
-                                    <a id="race-friend-link-mob" href="">Race a Friend</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                </div>
-            </div>
-
-           
-            
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">Viewing Session {{ datalog.session_num }}<span class="caret"
-                                                                                            id="session-caret"></span></a>
-                    <ul class="dropdown-menu">
-                        {% for session in datalog_list %}
-                        <li><a class="session-link"
-                               href="{{ url_for('view_day', user_id=datalog.user.id, date_str=date.strftime('%m-%d-%Y'), datalog_id=session.id) }}">Session
-                            {{ loop.index }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </li>
-                <li><a id="laptime-link" class="close-welcome" href="#laptimes" data-toggle="tab">Lap Times</a></li>
-                <li><a id="droneview-link" class="close-welcome" href="#droneview" data-toggle="tab">DroneView</a></li>
-				<li><a id="speed-gate-link" class="close-welcome" href="#speedgates" data-toggle="tab">Speed Gates</a></li>
-				<li><a id="splits-link" class="close-welcome" href="#splits" data-toggle="tab">Split Times</a></li>
-				<!-- ProCompare Removed
-                <li><a id="procompare-link" class="close-welcome" href="#procompare" data-toggle="tab">ProCompare</a>
-                </li>
-				-->
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false">More<span class="caret" id="session-caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a id="video-overlay-link" href="">Video Overlay</a></li>
-                        <li><a id="race-friend-link" href="">Race a Friend</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-        <!--/.nav-collapse -->
-    </div>
-</nav>
-<div id="puush-main-body" class="container pad-shadow">
-
-    <!-- welcome alert -->
-    <div id="welcome-alert" class="alert alert-info alert-dismissible fade in" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
-        <h5><strong>Welcome!</strong> Select a feature to view above
-        <span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></h5>
-    </div>
-
-    <!-- video alert -->
-    <div id="video-alert" style="display: none" class="alert alert-info alert-dismissible fade in" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
-        <h5><strong>Coming Soon!</strong> Synced video overlay coming soon! Excited? Tell us about it using feedback --></h5>
-    </div>
-
-    <!-- race-friend-alert -->
-    <div id="race-friend-alert" style="display: none" class="alert alert-info alert-dismissible fade in" role="alert">
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
-        <h5><strong>Coming Soon!</strong> Virtually race your friends! Excited? Tell us about it using feedback --></h5>
-    </div>
-
-    <!-- Name and Race Course -->
-    {% if race_course.name|length > 0 %}
-    <div class="center-block">
-        <h3 style="text-align:center"> {{ name }} @ {{ race_course.name }}</h3>
-        <h4 style="text-align:center"> {{ date.strftime('%m-%d-%Y %I:%M %p') }}</h4>
-    </div>
-    {% endif %}
-
-    <div class="tab-content">
-        <!-- SmartGauge Tab -->
-        <div class="tab-pane fade in active" id="smartgauge-tab">
-            <div id="SmartGauge-Jumbotron" class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3 id="SmartGaugeHeading" text-align="center"><em>Captured with</em> PUSH SmartGauge</h3>
+                        </ul>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4">
-                        <img width="350px" src="/static/resources/PUSH_SmartGauge_Small.jpg">
-                    </div>
-                    <div class="col-md-4">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- DroneView Tab -->
-        <div class="tab-pane fade" id="droneview">
-			{% if datalog.sproutvideo_url %}
-				<!-- Video / Interactive Mode Selection -->
-				<ul id='droneview-interactive-tabs' class="nav nav-tabs">
-					<li id="droneview-video-btn" role="presentation" class="active"><a href="#">Video</a></li>
-					<li id= "droneview-int-btn" role="presentation"><a href="#">Interactive DroneView</a></li>
-				</ul>
-				<!-- DroneView -->
-				<iframe col-centered width="940px" height="420px" id="doarama-iframe"
-						src=""
-						frameborder="0" webkitAllowFullScreen mozAllowFullScreen allowFullScreen>
-				</iframe>
-				<!-- Video -->
-				<div class="droneVideoWrapper">
-					<iframe col-centered id="droneview-video" class='sproutvideo-player' src='//videos.sproutvideo.com/embed/{{ datalog.sproutvideo_url }}/{{ datalog.sproutvideo_token }}?type=sd' 
-					width='630' height='354' frameborder='0' allowfullscreen></iframe>
-				</div>
-				<script type="text/javascript"><!-- hide DroneView when video available -->
-					$('#doarama-iframe').hide();
-				</script>
-			{% else %}
-				<!-- DroneView -->
-				<iframe col-centered width="940px" height="420px" id="doarama-iframe"
-						src="{{ DOARAMA_BASEURL }}/api/0.2/visualisation?k={{ vis_key }}&name={{ name }}&avatar=http%3A%2F%2Fplacehold.it%2F32x32"
-						frameborder="0" webkitAllowFullScreen mozAllowFullScreen allowFullScreen>
-				</iframe>
-				<!-- DroneView Mobile Placeholder -->
-				<div id="droneview-placeholder">
-					<p>We will render a mobile video of your Droneview in about 24 hours. In the meantime you can check on a laptop/desktop. We apologize for the
-						inconvenience.</p>
-				</div>
-			{% endif %}
-            <!-- Facebook DroneView Share -->
-            <div class="social-share">
-                <div class="fb-like"
-                     data-href="{{ request.url }}?page=droneview"
-                     data-layout="button" data-action="like"
-                     data-show-faces="true"
-                     data-share="true">
-                </div>
-                <!-- Shortlink Share Button -->
-                <button id="shortlink-droneview" type="button" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-link" aria-hidden="true"></span> Share Link
-                </button>
-            </div>
-        </div>
-        <!-- SpeedGate Tab -->
-        <div class="tab-pane fade" id="speedgates">
-            {% if speedgate_points %}
-            <div class="center-block">
-                <table id="speed-time-table" class="table table-striped">
-                    <thead>
-                    <tr>
-                        <td><h5>Lap Number</h4></td>
-                        <td><h5>Time mm:ss.sss</h4></td>
-                        {% for point in speedgate_points %}
-                        <td><h5>Gate #{{ loop.index }} MPH</h4></td>
-                        {% endfor %}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>{{ fastest_lap.lap_num }}</td>
-                        <td>
-							{{ "%.0f:%06.3f"|format(
-                            (fastest_lap.lap_time//60)|round|int,(fastest_lap.lap_time-(fastest_lap.lap_time//60)*60)|round(3)
-                            ) }}
-                        </td>
-                        {% for point in speedgate_points %}
-                        <td>{{ "%.1f"|format(point.speed_m_s * 2.23694) }}</td>
-                        {% endfor %}
-                    </tr>
-                    <tr>
-                        <td>Pro 1000cc</td>
-                        <td>1:32.8</td>
-                        <td>106.0</td>
-                        <td>107.3</td>
-                        <td>127.3</td>
-                        <td>107.9</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <img alt="Fontana_Speedgates" id="SpeedGates_Image" width="100%" src="/static/SpeedGates_Fontana.png">
-            </div>
-            {% endif %}
-            <!-- Facebook Laptime Share -->
-            <div class="social-share">
-                <div class="fb-like"
-                     data-href="{{ request.url }}#speedgates"
-                     data-layout="button" data-action="like"
-                     data-show-faces="true"
-                     data-share="true">
-                </div>
-            </div>
-        </div>
-        <!-- Splits Tab -->
-        <div class="tab-pane fade" id="splits">
-            {% if speedgate_points %}
-            <div class="center-block">
-                <table id="splits-table" class="table table-striped">
-                    <thead>
-                    <tr>
-                        <td><h5>Lap Number</h4></td>
-                        <td><h5>Time mm:ss.sss</h4></td>
-                        {% for split in fastest_lap_splits %}
-                        <td><h5>Split #{{ loop.index }} (ss.s)</h4></td>
-                        {% endfor %}
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>{{ fastest_lap.lap_num }}</td>
-                        <td>
-							{{ "%.0f:%06.3f"|format(
-                            (fastest_lap.lap_time//60)|round|int,(fastest_lap.lap_time-(fastest_lap.lap_time//60)*60)|round(3)
-                            ) }}
 
-                        </td>
-                        {% for split in fastest_lap_splits %}
-                        <td>{{ "%.1f"|format(split.split_time) }}</td>
-                        {% endfor %}
-                    </tr>
-                    <tr>
-                        <td>Pro 1000cc</td>
-                        <td>1:32.8</td>
-                        <td>12.6</td>
-                        <td>15.2</td>
-                        <td>19.8</td>
-                        <td>13.7</td>
-                        <td>19.4</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <img alt="Splits_Fontana" id="Splits_Image" width="100%" src="/static/Splits_Fontana.png">
-            </div>
-            {% endif %}
-            <!-- Facebook Laptime Share -->
-            <div class="social-share">
-                <div class="fb-like"
-                     data-href="{{ request.url }}?page=splits"
-                     data-layout="button" data-action="like"
-                     data-show-faces="true"
-                     data-share="true">
                 </div>
-            </div>
-        </div>
-        <!-- Lap Time Tab -->
-        <div class="tab-pane fade" id="laptimes">
-            {% if datalog.laps %}
-            <div class="center-block">
-            	<!-- Found a duplicate ID -->
-                <table id="lap-time-table" class="table table-striped">
-                    <thead>
-                    <tr>
-                        <td><h4>Lap Number</h4></td>
-                        <td><h4>Time mm:ss.sss</h4></td>
-                        <td><h4>Top Speed MPH</h4></td>
-                    </tr>
-                    </thead>
+                <div class="container col-xs-6 text-center">
+                    <img alt="Brand" id="Brand" src="../static/Push-Logo-Beta.png">
+                </div>
+                <div class="container col-xs-3 text-right">
 
-                    
-                    <tbody>
-                    {% for lap in datalog.laps %}
-                    <tr>
-                        <td>{{ loop.index }}</td>
-                        <td>{{ "%.0f:%06.3f"|format(
-                            (lap.lap_time//60)|round|int,(lap.lap_time-(lap.lap_time//60)*60)|round(3) ) }}
-                        </td>
-                        <td>{{ "%.1f"|format(lap.max_speed_mph) }}</td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-				<!-- @Todd 3pm Notice
-                <p id="withheld-text">Fastrack Academy requested lap times are withheld until after 3pm. Please check back then.</p>
-				-->
-            </div>
-            {% endif %}
-            <!-- Facebook Laptime Share -->
-            <div class="social-share">
-                <div class="fb-like"
-                     data-href="{{ request.url }}#laptimes"
-                     data-layout="button" data-action="like"
-                     data-show-faces="true"
-                     data-share="true">
+                    <div class="btn-group" uib-dropdown is-open="status.isopen" >
+                        <button class="btn btn puushRed glyphicon glyphicon-option-vertical" uib-dropdown-toggle ng-disabled="disabled">
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="single-button">
+                            <!--need to make a pop up for these two options-->
+                            <li role="menuitem"><a href="">Video Overlay</a></li>
+                            <li role="menuitem"><a href="">Race a Friend</a></li>
+
+                        </ul>
+                    </div>
+
                 </div>
             </div>
-        </div>
-        <!-- ProCompare Tab -->
-        <div class="tab-pane fade" id="procompare">
-            {% for file in procompare_files %}
-            <img class="procompare-img" src="{{ file }}"></img>
-            <!-- Facebook ProCompare Share -->
-            <div class="social-share">
-                <div class="fb-like"
-                     data-href="{{ request.url }}#procompare"
-                     data-layout="button" data-action="like"
-                     data-show-faces="true"
-                     data-share="true">
-                </div>
-            </div>
-            {% else %}
-            <div class="alert alert-warning" role="alert">
-                <h3>ProCompare Unavailable:</h4>
-                    <h4>Unfortunately ProCompare is not available for this session. If this is a track session
-                        with laps and you were expecting it or think this is an error, please contact us.</h4>
-            </div>
-            {% endfor %}
         </div>
     </div>
-    <!-- /tab-content -->
 </div>
-<!-- /container -->
-<!-- Include all compiled plugins (below), or include individual files as needed -->
+<div class="row">
+    <h4 class="container col-xs-6">Todd Approve 1</h4>
+    <h5 class="container col-xs-6 text-right">Time</h5>
+</div>
+<div class="row">
+    <h5 class="container col-xs-6">Date</h5>
+    <h4 class="container col-xs-6">
+
+
+        <!-- Facebook Laptime Share -->
+        <div class="social-share">
+            <div class="fb-like"
+                 data-href="{{ request.url }}#laptimes"
+                 data-layout="button" data-action="like"
+                 data-show-faces="true"
+                 data-share="true">
+            </div>
+        </div>
+        ICON ICON</h4>
+</div>
+<div class="row text-center">
+
+    <uib-accordion close-others="true">
+        <uib-accordion-group heading="Static Header, initially expanded" is-open="status.isFirstOpen" is-disabled="status.isFirstDisabled">
+            <uib-accordion-heading>
+                Lap Times <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isFirstOpen==false, 'glyphicon-chevron-up': status.isFirstOpen==true}"></i>
+            </uib-accordion-heading>
+
+            <div class="container">
+                <table class="table">
+                    <thead class="puushTextRed">
+                    <tr>
+                        <th class="text-left">LAPS</th>
+                        <th class="text-left">TIME</th>
+                        <th class="text-right">TOP SPEED</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <!--Dummy Data-->
+                        <td class="text-left">Dummy Data for Now</td>
+                        <td class="text-left">123</td>
+                        <td class="text-right">123456</td>
+
+                        <!--ng-repeat for lap in datalog.laps-->
+                        <!--<td class="text-left">{{lap.index}}</td>-->
+                        <!--<td class="text-left">{{"%.0f:%06.3f"|format((lap.lap_time//60)|round|int,(lap.lap_time-(lap.lap_time//60)*60)|round(3))}}</td>-->
+                        <!--<td class="text-right">{{"%.1f"|format(lap.max_speed_mph)}}</td>-->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </uib-accordion-group>
+        <uib-accordion-group is-open="status.is1open">
+            <uib-accordion-heading>
+                Drone View <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.is1open==true, 'glyphicon-chevron-down': status.is1open==false}"></i>
+            </uib-accordion-heading>
+            PLACEHOLDER
+        </uib-accordion-group>
+        <uib-accordion-group is-open="status.is2open">
+            <uib-accordion-heading>
+                Speed Gates <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.is2open==true, 'glyphicon-chevron-down': status.is2open==false}"></i>
+            </uib-accordion-heading>
+            PLACEHOLDER
+        </uib-accordion-group>
+        <uib-accordion-group is-open="status.open">
+            <uib-accordion-heading>
+                Split Times <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-up': status.open==true, 'glyphicon-chevron-down': status.open==false}"></i>
+            </uib-accordion-heading>
+            PLACEHOLDER
+        </uib-accordion-group>
+    </uib-accordion>
+
+
+</div>
+
+<!--<nav class="navbar navbar-default navbar-fixed-top">-->
+    <!--<div class="container">-->
+        <!--<div class="navbar-header">-->
+            <!--<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"-->
+                    <!--aria-expanded="false" aria-controls="navbar">-->
+                <!--<span class="sr-only">Toggle navigation</span>-->
+                <!--<span class="icon-bar"></span>-->
+                <!--<span class="icon-bar"></span>-->
+                <!--<span class="icon-bar"></span>-->
+            <!--</button>-->
+            <!--<img alt="Brand" id="Brand" src="/static/Push-Logo-Beta.png">-->
+
+            <!--<div class="row">-->
+            	<!--<button id="hidemenubutton" class="btn btn-large">Press to Hide Button </button>-->
+
+            <!--</div>-->
+            <!--<div class="row col-xs-12" id="mobile-menu">-->
+
+                        <!--<div class="container col-xs-6">-->
+                            <!--<ul class="nav nav-pills nav-stacked span2" >-->
+                                <!--<li class="dropdown">-->
+                                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
+                                       <!--aria-expanded="false">Viewing Session {{ datalog.session_num }}<span class="caret"-->
+                                                                                                            <!--&lt;!&ndash;id="session-caret"></span></a>&ndash;&gt;-->
+                                    <!--<ul class="dropdown-menu scrollable-menu">-->
+                                        <!--{% for session in datalog_list %}-->
+                                        <!--<li><a class="session-link"-->
+                                               <!--href="{{ url_for('view_day', user_id=datalog.user.id, date_str=date.strftime('%m-%d-%Y'), datalog_id=session.id) }}">Session-->
+                                            <!--{{ loop.index }}</a></li>-->
+                                        <!--{% endfor %}-->
+                                    <!--</ul>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a id="laptime-link-mob" class="close-welcome" href="#laptimes" data-toggle="tab">Lap Times</a>-->
+                                <!--</li>-->
+								<!--<li>-->
+                                    <!--<a id="speed-gate-link-mob" class="close-welcome" href="#speedgates" data-toggle="tab">Speed Gates</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a id="splits-link-mob" class="close-welcome" href="#splits" data-toggle="tab">Split Times</a>-->
+                                <!--</li>-->
+								<!--&lt;!&ndash; ProCompare Removed-->
+                                <!--<li>-->
+                                    <!--<a id="procompare-link" class="close-welcome" href="#procompare" data-toggle="tab">ProCompare</a>-->
+                                <!--</li>-->
+								<!--&ndash;&gt;-->
+                            <!--</ul>-->
+                        <!--</div>-->
+
+
+                        <!--<div class="container col-xs-6">-->
+                            <!--<ul class="nav nav-pills nav-stacked span2">-->
+                                <!--<li>-->
+                                    <!--<a id="droneview-link-mob" class="close-welcome" href="#droneview" data-toggle="tab">DroneView</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a id="video-overlay-link-mob" href="">Video Overlay</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a id="race-friend-link-mob" href="">Race a Friend</a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</div>-->
+
+                <!--</div>-->
+            <!--</div>-->
+
+
+
+        <!--<div id="navbar" class="navbar-collapse collapse">-->
+            <!--<ul class="nav navbar-nav">-->
+                <!--<li class="dropdown">-->
+                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
+                       <!--aria-expanded="false">Viewing Session {{ datalog.session_num }}<span class="caret"-->
+                                                                                            <!--id="session-caret"></span></a>-->
+                    <!--<ul class="dropdown-menu">-->
+                        <!--{% for session in datalog_list %}-->
+                        <!--<li><a class="session-link"-->
+                               <!--href="{{ url_for('view_day', user_id=datalog.user.id, date_str=date.strftime('%m-%d-%Y'), datalog_id=session.id) }}">Session-->
+                            <!--{{ loop.index }}</a></li>-->
+                        <!--{% endfor %}-->
+                    <!--</ul>-->
+                <!--</li>-->
+                <!--<li><a id="laptime-link" class="close-welcome" href="#laptimes" data-toggle="tab">Lap Times</a></li>-->
+                <!--<li><a id="droneview-link" class="close-welcome" href="#droneview" data-toggle="tab">DroneView</a></li>-->
+				<!--<li><a id="speed-gate-link" class="close-welcome" href="#speedgates" data-toggle="tab">Speed Gates</a></li>-->
+				<!--<li><a id="splits-link" class="close-welcome" href="#splits" data-toggle="tab">Split Times</a></li>-->
+				<!--&lt;!&ndash; ProCompare Removed-->
+                <!--<li><a id="procompare-link" class="close-welcome" href="#procompare" data-toggle="tab">ProCompare</a>-->
+                <!--</li>-->
+				<!--&ndash;&gt;-->
+                <!--<li class="dropdown">-->
+                    <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"-->
+                       <!--aria-expanded="false">More<span class="caret" id="session-caret"></span></a>-->
+                    <!--<ul class="dropdown-menu">-->
+                        <!--<li><a id="video-overlay-link" href="">Video Overlay</a></li>-->
+                        <!--<li><a id="race-friend-link" href="">Race a Friend</a></li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+            <!--</ul>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;/.nav-collapse &ndash;&gt;-->
+    <!--</div>-->
+<!--</nav>-->
+<!--<div id="puush-main-body" class="container pad-shadow">-->
+
+    <!--&lt;!&ndash; welcome alert &ndash;&gt;-->
+    <!--<div id="welcome-alert" class="alert alert-info alert-dismissible fade in" role="alert">-->
+        <!--<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span-->
+                <!--aria-hidden="true">&times;</span></button>-->
+        <!--<h5><strong>Welcome!</strong> Select a feature to view above-->
+        <!--<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></h5>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash; video alert &ndash;&gt;-->
+    <!--<div id="video-alert" style="display: none" class="alert alert-info alert-dismissible fade in" role="alert">-->
+        <!--<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span-->
+                <!--aria-hidden="true">&times;</span></button>-->
+        <!--<h5><strong>Coming Soon!</strong> Synced video overlay coming soon! Excited? Tell us about it using feedback &ndash;&gt;</h5>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash; race-friend-alert &ndash;&gt;-->
+    <!--<div id="race-friend-alert" style="display: none" class="alert alert-info alert-dismissible fade in" role="alert">-->
+        <!--<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span-->
+                <!--aria-hidden="true">&times;</span></button>-->
+        <!--<h5><strong>Coming Soon!</strong> Virtually race your friends! Excited? Tell us about it using feedback &ndash;&gt;</h5>-->
+    <!--</div>-->
+
+    <!--&lt;!&ndash; Name and Race Course &ndash;&gt;-->
+    <!--{% if race_course.name|length > 0 %}-->
+    <!--<div class="center-block">-->
+        <!--<h3 style="text-align:center"> {{ name }} @ {{ race_course.name }}</h3>-->
+        <!--<h4 style="text-align:center"> {{ date.strftime('%m-%d-%Y %I:%M %p') }}</h4>-->
+    <!--</div>-->
+    <!--{% endif %}-->
+
+    <!--<div class="tab-content">-->
+        <!--&lt;!&ndash; SmartGauge Tab &ndash;&gt;-->
+        <!--<div class="tab-pane fade in active" id="smartgauge-tab">-->
+            <!--<div id="SmartGauge-Jumbotron" class="container-fluid">-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-12">-->
+                        <!--<h3 id="SmartGaugeHeading" text-align="center"><em>Captured with</em> PUSH SmartGauge</h3>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="row">-->
+                    <!--<div class="col-md-4"></div>-->
+                    <!--<div class="col-md-4">-->
+                        <!--<img width="350px" src="/static/resources/PUSH_SmartGauge_Small.jpg">-->
+                    <!--</div>-->
+                    <!--<div class="col-md-4">-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash; DroneView Tab &ndash;&gt;-->
+        <!--<div class="tab-pane fade" id="droneview">-->
+			<!--{% if datalog.sproutvideo_url %}-->
+				<!--&lt;!&ndash; Video / Interactive Mode Selection &ndash;&gt;-->
+				<!--<ul id='droneview-interactive-tabs' class="nav nav-tabs">-->
+					<!--<li id="droneview-video-btn" role="presentation" class="active"><a href="#">Video</a></li>-->
+					<!--<li id= "droneview-int-btn" role="presentation"><a href="#">Interactive DroneView</a></li>-->
+				<!--</ul>-->
+				<!--&lt;!&ndash; DroneView &ndash;&gt;-->
+				<!--<iframe col-centered width="940px" height="420px" id="doarama-iframe"-->
+						<!--src=""-->
+						<!--frameborder="0" webkitAllowFullScreen mozAllowFullScreen allowFullScreen>-->
+				<!--</iframe>-->
+				<!--&lt;!&ndash; Video &ndash;&gt;-->
+				<!--<div class="droneVideoWrapper">-->
+					<!--<iframe col-centered id="droneview-video" class='sproutvideo-player' src='//videos.sproutvideo.com/embed/{{ datalog.sproutvideo_url }}/{{ datalog.sproutvideo_token }}?type=sd'-->
+					<!--width='630' height='354' frameborder='0' allowfullscreen></iframe>-->
+				<!--</div>-->
+				<!--<script type="text/javascript">&lt;!&ndash; hide DroneView when video available &ndash;&gt;-->
+					<!--$('#doarama-iframe').hide();-->
+				<!--</script>-->
+			<!--{% else %}-->
+				<!--&lt;!&ndash; DroneView &ndash;&gt;-->
+				<!--<iframe col-centered width="940px" height="420px" id="doarama-iframe"-->
+						<!--src="{{ DOARAMA_BASEURL }}/api/0.2/visualisation?k={{ vis_key }}&name={{ name }}&avatar=http%3A%2F%2Fplacehold.it%2F32x32"-->
+						<!--frameborder="0" webkitAllowFullScreen mozAllowFullScreen allowFullScreen>-->
+				<!--</iframe>-->
+				<!--&lt;!&ndash; DroneView Mobile Placeholder &ndash;&gt;-->
+				<!--<div id="droneview-placeholder">-->
+					<!--<p>We will render a mobile video of your Droneview in about 24 hours. In the meantime you can check on a laptop/desktop. We apologize for the-->
+						<!--inconvenience.</p>-->
+				<!--</div>-->
+			<!--{% endif %}-->
+            <!--&lt;!&ndash; Facebook DroneView Share &ndash;&gt;-->
+            <!--<div class="social-share">-->
+                <!--<div class="fb-like"-->
+                     <!--data-href="{{ request.url }}?page=droneview"-->
+                     <!--data-layout="button" data-action="like"-->
+                     <!--data-show-faces="true"-->
+                     <!--data-share="true">-->
+                <!--</div>-->
+                <!--&lt;!&ndash; Shortlink Share Button &ndash;&gt;-->
+                <!--<button id="shortlink-droneview" type="button" class="btn btn-default btn-sm">-->
+                    <!--<span class="glyphicon glyphicon-link" aria-hidden="true"></span> Share Link-->
+                <!--</button>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash; SpeedGate Tab &ndash;&gt;-->
+        <!--<div class="tab-pane fade" id="speedgates">-->
+            <!--{% if speedgate_points %}-->
+            <!--<div class="center-block">-->
+                <!--<table id="speed-time-table" class="table table-striped">-->
+                    <!--<thead>-->
+                    <!--<tr>-->
+                        <!--<td><h5>Lap Number</h4></td>-->
+                        <!--<td><h5>Time mm:ss.sss</h4></td>-->
+                        <!--{% for point in speedgate_points %}-->
+                        <!--<td><h5>Gate #{{ loop.index }} MPH</h4></td>-->
+                        <!--{% endfor %}-->
+                    <!--</tr>-->
+                    <!--</thead>-->
+                    <!--<tbody>-->
+                    <!--<tr>-->
+                        <!--<td>{{ fastest_lap.lap_num }}</td>-->
+                        <!--<td>-->
+							<!--{{ "%.0f:%06.3f"|format(-->
+                            <!--(fastest_lap.lap_time//60)|round|int,(fastest_lap.lap_time-(fastest_lap.lap_time//60)*60)|round(3)-->
+                            <!--) }}-->
+                        <!--</td>-->
+                        <!--{% for point in speedgate_points %}-->
+                        <!--<td>{{ "%.1f"|format(point.speed_m_s * 2.23694) }}</td>-->
+                        <!--{% endfor %}-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td>Pro 1000cc</td>-->
+                        <!--<td>1:32.8</td>-->
+                        <!--<td>106.0</td>-->
+                        <!--<td>107.3</td>-->
+                        <!--<td>127.3</td>-->
+                        <!--<td>107.9</td>-->
+                    <!--</tr>-->
+                    <!--</tbody>-->
+                <!--</table>-->
+                <!--<img alt="Fontana_Speedgates" id="SpeedGates_Image" width="100%" src="/static/SpeedGates_Fontana.png">-->
+            <!--</div>-->
+            <!--{% endif %}-->
+            <!--&lt;!&ndash; Facebook Laptime Share &ndash;&gt;-->
+            <!--<div class="social-share">-->
+                <!--<div class="fb-like"-->
+                     <!--data-href="{{ request.url }}#speedgates"-->
+                     <!--data-layout="button" data-action="like"-->
+                     <!--data-show-faces="true"-->
+                     <!--data-share="true">-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash; Splits Tab &ndash;&gt;-->
+        <!--<div class="tab-pane fade" id="splits">-->
+            <!--{% if speedgate_points %}-->
+            <!--<div class="center-block">-->
+                <!--<table id="splits-table" class="table table-striped">-->
+                    <!--<thead>-->
+                    <!--<tr>-->
+                        <!--<td><h5>Lap Number</h4></td>-->
+                        <!--<td><h5>Time mm:ss.sss</h4></td>-->
+                        <!--{% for split in fastest_lap_splits %}-->
+                        <!--<td><h5>Split #{{ loop.index }} (ss.s)</h4></td>-->
+                        <!--{% endfor %}-->
+                    <!--</tr>-->
+                    <!--</thead>-->
+                    <!--<tbody>-->
+                    <!--<tr>-->
+                        <!--<td>{{ fastest_lap.lap_num }}</td>-->
+                        <!--<td>-->
+							<!--{{ "%.0f:%06.3f"|format(-->
+                            <!--(fastest_lap.lap_time//60)|round|int,(fastest_lap.lap_time-(fastest_lap.lap_time//60)*60)|round(3)-->
+                            <!--) }}-->
+
+                        <!--</td>-->
+                        <!--{% for split in fastest_lap_splits %}-->
+                        <!--<td>{{ "%.1f"|format(split.split_time) }}</td>-->
+                        <!--{% endfor %}-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td>Pro 1000cc</td>-->
+                        <!--<td>1:32.8</td>-->
+                        <!--<td>12.6</td>-->
+                        <!--<td>15.2</td>-->
+                        <!--<td>19.8</td>-->
+                        <!--<td>13.7</td>-->
+                        <!--<td>19.4</td>-->
+                    <!--</tr>-->
+                    <!--</tbody>-->
+                <!--</table>-->
+                <!--<img alt="Splits_Fontana" id="Splits_Image" width="100%" src="/static/Splits_Fontana.png">-->
+            <!--</div>-->
+            <!--{% endif %}-->
+            <!--&lt;!&ndash; Facebook Laptime Share &ndash;&gt;-->
+            <!--<div class="social-share">-->
+                <!--<div class="fb-like"-->
+                     <!--data-href="{{ request.url }}?page=splits"-->
+                     <!--data-layout="button" data-action="like"-->
+                     <!--data-show-faces="true"-->
+                     <!--data-share="true">-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash; Lap Time Tab &ndash;&gt;-->
+        <!--<div class="tab-pane fade" id="laptimes">-->
+            <!--{% if datalog.laps %}-->
+            <!--<div class="center-block">-->
+            	<!--&lt;!&ndash; Found a duplicate ID &ndash;&gt;-->
+                <!--<table id="lap-time-table" class="table table-striped">-->
+                    <!--<thead>-->
+                    <!--<tr>-->
+                        <!--<td><h4>Lap Number</h4></td>-->
+                        <!--<td><h4>Time mm:ss.sss</h4></td>-->
+                        <!--<td><h4>Top Speed MPH</h4></td>-->
+                    <!--</tr>-->
+                    <!--</thead>-->
+
+
+                    <!--<tbody>-->
+                    <!--{% for lap in datalog.laps %}-->
+                    <!--<tr>-->
+                        <!--<td>{{ loop.index }}</td>-->
+                        <!--<td>{{ "%.0f:%06.3f"|format(-->
+                            <!--(lap.lap_time//60)|round|int,(lap.lap_time-(lap.lap_time//60)*60)|round(3) ) }}-->
+                        <!--</td>-->
+                        <!--<td>{{ "%.1f"|format(lap.max_speed_mph) }}</td>-->
+                    <!--</tr>-->
+                    <!--{% endfor %}-->
+                    <!--</tbody>-->
+                <!--</table>-->
+				<!--&lt;!&ndash; @Todd 3pm Notice-->
+                <!--<p id="withheld-text">Fastrack Academy requested lap times are withheld until after 3pm. Please check back then.</p>-->
+				<!--&ndash;&gt;-->
+            <!--</div>-->
+            <!--{% endif %}-->
+            <!--&lt;!&ndash; Facebook Laptime Share &ndash;&gt;-->
+            <!--<div class="social-share">-->
+                <!--<div class="fb-like"-->
+                     <!--data-href="{{ request.url }}#laptimes"-->
+                     <!--data-layout="button" data-action="like"-->
+                     <!--data-show-faces="true"-->
+                     <!--data-share="true">-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--&lt;!&ndash; ProCompare Tab &ndash;&gt;-->
+        <!--<div class="tab-pane fade" id="procompare">-->
+            <!--{% for file in procompare_files %}-->
+            <!--<img class="procompare-img" src="{{ file }}"></img>-->
+            <!--&lt;!&ndash; Facebook ProCompare Share &ndash;&gt;-->
+            <!--<div class="social-share">-->
+                <!--<div class="fb-like"-->
+                     <!--data-href="{{ request.url }}#procompare"-->
+                     <!--data-layout="button" data-action="like"-->
+                     <!--data-show-faces="true"-->
+                     <!--data-share="true">-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--{% else %}-->
+            <!--<div class="alert alert-warning" role="alert">-->
+                <!--<h3>ProCompare Unavailable:</h4>-->
+                    <!--<h4>Unfortunately ProCompare is not available for this session. If this is a track session-->
+                        <!--with laps and you were expecting it or think this is an error, please contact us.</h4>-->
+            <!--</div>-->
+            <!--{% endfor %}-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--&lt;!&ndash; /tab-content &ndash;&gt;-->
+<!--</div>-->
+ <!--/container-->
+ <!--Include all compiled plugins (below), or include individual files as needed-->
 <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
 
 <script type="text/javascript"><!-- switch DroneView video / interactive mode -->
-    $('#droneview-int-btn').on('click', function () {
+    $('#droneview-int-btn').on('click', fu`nction () {
 		$('#droneview-video').hide();
 		$('#doarama-iframe').attr('src', '{{ DOARAMA_BASEURL }}/api/0.2/visualisation?k={{ vis_key }}&name={{ name }}&avatar=http%3A%2F%2Fplacehold.it%2F32x32');
 		$('#doarama-iframe').show();
 		$('#droneview-int-btn').attr('class', 'active')
-		$('#droneview-video-btn').attr('class', '')		
+		$('#droneview-video-btn').attr('class', '')
     });
     $('#droneview-video-btn').on('click', function () {
 		$('#droneview-video').show();
 		$('#doarama-iframe').hide();
 		$('#droneview-int-btn').attr('class', '')
-		$('#droneview-video-btn').attr('class', 'active')		
-    });		
+		$('#droneview-video-btn').attr('class', 'active')
+    });
 </script>
 
 <script type="text/javascript"><!-- select tab based on url param -->
@@ -533,7 +646,7 @@ mixpanel.init("ae4c13b855e9542b7a041f34fac3a2e8");
 			mixpanel.track("feature view",{"feature":"DroneView video direct"})
 			ga('send', 'pageview', {
 				'title': 'DroneView-video-direct'
-			});		
+			});
 		}
 	} else {
 		ga('send', 'pageview', {
@@ -633,6 +746,11 @@ $(document).ready(function () {
         var g = d.createElement(t);g.id = 'doorbellScript';g.type = 'text/javascript';g.async = true;g.src = 'https://embed.doorbell.io/button/2442?t='+(new Date().getTime());(d.getElementsByTagName('head')[0]||d.getElementsByTagName('body')[0]).appendChild(g);
     }(document, 'script'));
 </script>
+
+<!--Linking Controllers-->
+<script type="text/javascript" src="../static/js/app.js"></script>
+<script type="text/javascript" src="../static/js/controllers/view_dayCtrl.js"></script>
+
 </body>
 </html>
 

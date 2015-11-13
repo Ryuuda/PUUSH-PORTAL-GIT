@@ -329,3 +329,4 @@ def set_local_development_flag():
     # Flag for local development
     global LOCAL_DEVELOPMENT
     LOCAL_DEVELOPMENT = True
+
